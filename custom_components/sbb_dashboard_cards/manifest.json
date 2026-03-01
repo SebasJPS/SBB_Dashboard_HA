@@ -2,7 +2,7 @@
   "domain": "sbb_dashboard_cards",
   "name": "SBB Dashboard Cards",
   "config_flow": true,
-  "integration_type": "service",
+  "integration_type": "helper",
   "documentation": "https://github.com/SebasJPS/SBB_Dashboard_HA",
   "issue_tracker": "https://github.com/SebasJPS/SBB_Dashboard_HA/issues",
   "codeowners": [

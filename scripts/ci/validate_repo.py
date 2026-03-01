@@ -52,10 +52,7 @@ def check_versions(manifest: dict[str, Any], version_text: str) -> None:
 def check_manifest(manifest: dict[str, Any]) -> None:
     _assert(manifest.get("domain") == DOMAIN, f"manifest domain must be '{DOMAIN}'")
     _assert(manifest.get("config_flow") is True, "manifest config_flow must be true")
-    _assert(
-        manifest.get("integration_type") in {"helper", "service"},
-        "manifest integration_type must be 'helper' or 'service'",
-    )
+    _assert(manifest.get("integration_type") == "helper", "manifest integration_type must be 'helper'")
 
 
 def check_hacs(hacs_data: dict[str, Any]) -> None:
