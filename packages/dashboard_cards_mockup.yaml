@@ -1,0 +1,147 @@
+input_boolean:
+  light_wohnzimmer_color_mode:
+    name: Wohnzimmer Licht Farbmodus
+    icon: mdi:palette
+  camera_fullscreen_mode:
+    name: Kamera Vollbild Modus
+    icon: mdi:fit-to-screen
+  camera_auto_open_enabled:
+    name: Kamera Auto-Vollbild aktiv
+    icon: mdi:auto-mode
+  camera_event_motion:
+    name: Kamera Event Bewegung (Test)
+    icon: mdi:motion-sensor
+  camera_event_doorbell:
+    name: Kamera Event Klingel (Test)
+    icon: mdi:doorbell-video
+  camera_event_alarm:
+    name: Kamera Event Alarm (Test)
+    icon: mdi:alarm-light
+
+timer:
+  light_wohnzimmer_color_mode_window:
+    name: Licht Farbmodus Fenster
+    duration: "00:00:12"
+  camera_fullscreen_window:
+    name: Kamera Vollbild Fenster
+    duration: "00:01:30"
+
+template:
+  - binary_sensor:
+      - name: Kamera Auto-Vollbild Bedingung
+        unique_id: kamera_auto_vollbild_bedingung
+        state: >
+          {{
+            is_state('input_boolean.camera_event_motion', 'on')
+            or is_state('input_boolean.camera_event_doorbell', 'on')
+            or is_state('input_boolean.camera_event_alarm', 'on')
+          }}
+
+script:
+  light_wohnzimmer_color_mode_enable:
+    alias: Dashboard - Licht Farbmodus starten
+    mode: restart
+    sequence:
+      - action: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.light_wohnzimmer_color_mode
+      - action: timer.start
+        target:
+          entity_id: timer.light_wohnzimmer_color_mode_window
+        data:
+          duration: "00:00:12"
+
+  light_wohnzimmer_color_mode_disable:
+    alias: Dashboard - Licht Farbmodus beenden
+    mode: restart
+    sequence:
+      - action: timer.cancel
+        target:
+          entity_id: timer.light_wohnzimmer_color_mode_window
+      - action: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.light_wohnzimmer_color_mode
+
+  camera_open_fullscreen:
+    alias: Dashboard - Kamera Vollbild an
+    mode: restart
+    sequence:
+      - action: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.camera_fullscreen_mode
+      - action: timer.start
+        target:
+          entity_id: timer.camera_fullscreen_window
+        data:
+          duration: "00:01:30"
+
+  camera_close_fullscreen:
+    alias: Dashboard - Kamera Vollbild aus
+    mode: restart
+    sequence:
+      - action: timer.cancel
+        target:
+          entity_id: timer.camera_fullscreen_window
+      - action: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.camera_fullscreen_mode
+
+automation:
+  - id: dashboard_light_color_mode_timeout
+    alias: Dashboard - Licht Farbmodus Timeout
+    trigger:
+      - platform: event
+        event_type: timer.finished
+        event_data:
+          entity_id: timer.light_wohnzimmer_color_mode_window
+    action:
+      - action: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.light_wohnzimmer_color_mode
+
+  - id: dashboard_camera_auto_open
+    alias: Dashboard - Kamera bei Event in Vollbild
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.kamera_auto_vollbild_bedingung
+        from: "off"
+        to: "on"
+    condition:
+      - condition: state
+        entity_id: input_boolean.camera_auto_open_enabled
+        state: "on"
+    action:
+      - action: script.camera_open_fullscreen
+
+  - id: dashboard_camera_extend_timeout_on_event
+    alias: Dashboard - Kamera Vollbild Timeout verlaengern bei Event
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.kamera_auto_vollbild_bedingung
+        to: "on"
+    condition:
+      - condition: state
+        entity_id: input_boolean.camera_fullscreen_mode
+        state: "on"
+    action:
+      - action: timer.start
+        target:
+          entity_id: timer.camera_fullscreen_window
+        data:
+          duration: "00:01:30"
+
+  - id: dashboard_camera_fullscreen_timeout
+    alias: Dashboard - Kamera Vollbild Timeout
+    trigger:
+      - platform: event
+        event_type: timer.finished
+        event_data:
+          entity_id: timer.camera_fullscreen_window
+    condition:
+      - condition: state
+        entity_id: binary_sensor.kamera_auto_vollbild_bedingung
+        state: "off"
+    action:
+      - action: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.camera_fullscreen_mode
