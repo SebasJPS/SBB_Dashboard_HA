@@ -1,0 +1,71 @@
+{
+  "config": {
+    "abort": {
+      "single_instance_allowed": "Only a single SBB Dashboard Cards instance is allowed."
+    },
+    "error": {
+      "event_entities_required": "Disable test triggers only if all three event entities are set.",
+      "yaml_required": "Filename must end with .yaml"
+    },
+    "step": {
+      "user": {
+        "title": "SBB Dashboard Cards",
+        "description": "Select your entities and output filenames. The integration will generate dashboard and package YAML files.",
+        "data": {
+          "light_main": "Main light entity",
+          "camera_main": "Main camera entity",
+          "light_hall": "Hall light entity",
+          "switch_pump": "Pump switch entity",
+          "lock_door": "Door lock entity",
+          "event_motion": "Motion event entity (optional)",
+          "event_doorbell": "Doorbell event entity (optional)",
+          "event_alarm": "Alarm event entity (optional)",
+          "include_test_triggers": "Include test trigger helpers",
+          "dashboard_filename": "Dashboard output file",
+          "package_filename": "Package output file"
+        }
+      }
+    }
+  },
+  "options": {
+    "error": {
+      "event_entities_required": "Disable test triggers only if all three event entities are set.",
+      "yaml_required": "Filename must end with .yaml"
+    },
+    "step": {
+      "init": {
+        "title": "SBB Dashboard Cards options",
+        "description": "Update entities and output paths. Saving options regenerates files.",
+        "data": {
+          "light_main": "Main light entity",
+          "camera_main": "Main camera entity",
+          "light_hall": "Hall light entity",
+          "switch_pump": "Pump switch entity",
+          "lock_door": "Door lock entity",
+          "event_motion": "Motion event entity (optional)",
+          "event_doorbell": "Doorbell event entity (optional)",
+          "event_alarm": "Alarm event entity (optional)",
+          "include_test_triggers": "Include test trigger helpers",
+          "dashboard_filename": "Dashboard output file",
+          "package_filename": "Package output file"
+        }
+      }
+    }
+  },
+  "services": {
+    "generate_files": {
+      "name": "Generate dashboard files",
+      "description": "Generate or regenerate dashboard and package YAML files from current integration settings.",
+      "fields": {
+        "entry_id": {
+          "name": "Config entry ID",
+          "description": "Optional. Generate files only for this specific SBB Dashboard Cards config entry."
+        },
+        "overwrite": {
+          "name": "Overwrite existing files",
+          "description": "If true, existing files are overwritten."
+        }
+      }
+    }
+  }
+}

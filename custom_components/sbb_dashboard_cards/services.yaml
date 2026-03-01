@@ -1,0 +1,16 @@
+generate_files:
+  name: Generate dashboard files
+  description: Generate or regenerate dashboard and package YAML files from current integration settings.
+  fields:
+    entry_id:
+      name: Config entry ID
+      description: Optional. Generate files only for this specific SBB Dashboard Cards config entry.
+      example: "01JABCXYZ123"
+      selector:
+        text:
+    overwrite:
+      name: Overwrite existing files
+      description: If true, existing files are overwritten.
+      default: true
+      selector:
+        boolean:

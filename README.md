@@ -1,112 +1,86 @@
-# SBB Dashboard Cards fuer Home Assistant (Public-Repo Setup)
+# SBB Dashboard Cards (HACS Integration)
 
-Dieses Repo enthaelt ein Dashboard-Mockup fuer Home Assistant mit:
+Custom Home Assistant integration to generate a configurable dashboard and matching package for:
 
-- Licht-Tile mit Helligkeit und temporaerem Farbmodus (Double-Tap + Timeout)
-- Kamera-Ansicht mit Umschaltung zwischen Normal- und Vollbildmodus
-- Auto-Vollbild bei Event-Triggern (Bewegung, Klingel, Alarm) inklusive Timeout
-- Test-Triggern, damit alles ohne echte Sensoren pruefbar ist
-- Public-Repo Konfiguration: Entitaeten werden pro Nutzer beim Setup gesetzt
+- Light card with brightness and temporary color mode (`double_tap` + timeout)
+- Camera card with normal/fullscreen dashboard states
+- Auto-fullscreen on event conditions (motion/doorbell/alarm)
+- Optional test triggers for users without real event sensors
 
-## Inhalt
+## HACS Installation (Recommended)
 
-- `dashboard_template.yaml`: Template mit Platzhaltern fuer Entitaeten
-- `dashboard_mockup.yaml`: Generierte Lovelace YAML (wird aus dem Template erzeugt)
-- `packages/dashboard_cards_mockup.yaml`: Helper, Timer, Scripts und Automationen
-- `config/entities.example.yaml`: Beispiel fuer Entitaeten-Mapping
-- `scripts/generate_dashboard.py`: Generator fuer benutzerdefinierte Dashboard-YAML
+1. Add this repository in HACS as a **Custom repository** with type **Integration**.
+2. Install **SBB Dashboard Cards** in HACS.
+3. Restart Home Assistant.
+4. Go to `Settings -> Devices & Services -> Add Integration`.
+5. Add **SBB Dashboard Cards** and select your entities in the config flow.
 
-## Voraussetzungen
+On first setup, the integration generates:
 
-- Laufende Home-Assistant-Instanz
-- Zugriff auf den Konfigurationsordner `/config`
-- Dashboard im YAML-Modus oder Nutzung des Raw Configuration Editors
+- Dashboard file: `/config/sbb_dashboard_cards_dashboard.yaml`
+- Package file: `/config/packages/sbb_dashboard_cards.yaml`
 
-## Installation in Home Assistant
+You can change both output paths in integration options.
 
-1. **Packages aktivieren**
-   In `/config/configuration.yaml` sicherstellen, dass Packages eingebunden sind:
+## Home Assistant Setup
+
+1. Ensure packages are enabled in `/config/configuration.yaml`:
 
 ```yaml
 homeassistant:
   packages: !include_dir_named packages
 ```
 
-2. **Package-Datei kopieren**
-   Datei aus diesem Repo nach Home Assistant kopieren:
+2. Restart Home Assistant after the package file is generated/updated.
+3. Import the generated dashboard YAML:
+- Create a YAML dashboard and point to `/config/sbb_dashboard_cards_dashboard.yaml`, or
+- Copy the file content into Lovelace Raw Configuration Editor.
 
-- Von: `packages/dashboard_cards_mockup.yaml`
-- Nach: `/config/packages/dashboard_cards_mockup.yaml`
+## Config Flow Inputs
 
-3. **Entitaeten pro Nutzer definieren**
+Required entity selections:
 
-Im Repo:
+- `light_main`
+- `camera_main`
+- `light_hall`
+- `switch_pump`
+- `lock_door`
 
-```bash
-python3 scripts/generate_dashboard.py --init
-```
+Optional event entities:
 
-Dann `config/entities.yaml` mit eigenen IDs fuellen:
+- `event_motion`
+- `event_doorbell`
+- `event_alarm`
 
-```yaml
-light_main: light.wohnzimmer
-camera_main: camera.haustuer
-light_hall: light.flur
-switch_pump: switch.gartenpumpe
-lock_door: lock.haustuer
-```
+If event entities are not configured, keep `include_test_triggers = true` to use internal test helpers.
 
-Danach generieren:
+## Regenerate Files
 
-```bash
-python3 scripts/generate_dashboard.py
-```
+The integration provides service:
 
-4. **Dashboard YAML importieren**
-   Inhalt von `dashboard_mockup.yaml` in ein Lovelace Dashboard uebernehmen:
+- `sbb_dashboard_cards.generate_files`
 
-- Entweder neues YAML-Dashboard anlegen
-- Oder im bestehenden Dashboard den Raw YAML Editor verwenden
+Service fields:
 
-5. **Konfiguration pruefen und neu laden**
+- `entry_id` (optional): only generate for one config entry
+- `overwrite` (default `true`): overwrite existing files or keep them
 
-- `Einstellungen > System > Reparaturen` (Config-Check)
-- Danach Home Assistant neu starten
+## Repository Structure
 
-## Funktionsweise
+- `custom_components/sbb_dashboard_cards/`: HACS integration
+- `dashboard_template.yaml`: legacy template asset
+- `scripts/generate_dashboard.py`: legacy local generator (manual/non-HACS flow)
 
-### Light Card
+## Notes
 
-- `Tap`: Licht ein/aus
-- `Slider`: Helligkeit (Normalmodus)
-- `Double-Tap`: Farbmodus fuer 12 Sekunden
-- Bei Ablauf des Timers wird der Farbmodus automatisch deaktiviert
+- The integration is designed for public use: each user maps their own entities during setup.
+- Existing files are not overwritten during initial setup (`overwrite=false` on first generation).
+- Saving integration options regenerates files with overwrite enabled.
 
-### Kamera Card
+## Maintainer Release Workflow
 
-- Normalansicht mit Live-Bild + Schnellaktionen
-- `Tap` oeffnet Vollbildansicht
-- Vollbildansicht zeigt Kamera + Steuerkacheln
-- Auto-Vollbild bei aktiver Event-Bedingung (wenn Auto-Modus aktiv)
-- Timeout schliesst Vollbild, sobald kein Event mehr aktiv ist
-
-## Testmodus (ohne echte Sensoren)
-
-Diese Test-Helper sind enthalten:
-
-- `input_boolean.camera_event_motion`
-- `input_boolean.camera_event_doorbell`
-- `input_boolean.camera_event_alarm`
-
-Sie simulieren die Event-Trigger fuer die Auto-Vollbild-Logik.
-
-## Auf produktive Sensoren umstellen
-
-In `packages/dashboard_cards_mockup.yaml` die Template-Logik von
-`binary_sensor.kamera_auto_vollbild_bedingung` auf echte Sensoren anpassen.
-
-## Fuer Maintainer (Public Repo)
-
-- `dashboard_template.yaml` bleibt die einzige Quelle fuer Layout-Logik.
-- Nutzer bearbeiten nur `config/entities.yaml`.
-- `dashboard_mockup.yaml` wird immer aus Generator + Template erzeugt.
+- Version source: `VERSION` and `custom_components/sbb_dashboard_cards/manifest.json` must match.
+- Changelog: update `CHANGELOG.md` for every release.
+- CI validation runs on push/PR via `.github/workflows/validate.yml`.
+- Tagged release workflow (`vX.Y.Z`) builds `dist/sbb_dashboard_cards.zip` and attaches it to GitHub release via `.github/workflows/release.yml`.
+- Full release instructions: `docs/RELEASING.md`.

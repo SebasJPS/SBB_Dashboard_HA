@@ -1,0 +1,71 @@
+{
+  "config": {
+    "abort": {
+      "single_instance_allowed": "Es ist nur eine Instanz von SBB Dashboard Cards erlaubt."
+    },
+    "error": {
+      "event_entities_required": "Test-Trigger nur deaktivieren, wenn alle drei Event-Entitaeten gesetzt sind.",
+      "yaml_required": "Dateiname muss auf .yaml enden"
+    },
+    "step": {
+      "user": {
+        "title": "SBB Dashboard Cards",
+        "description": "Waehle deine Entitaeten und Ausgabepfade. Die Integration erzeugt Dashboard- und Package-YAML automatisch.",
+        "data": {
+          "light_main": "Haupt-Licht Entitaet",
+          "camera_main": "Haupt-Kamera Entitaet",
+          "light_hall": "Flur-Licht Entitaet",
+          "switch_pump": "Pumpen-Schalter Entitaet",
+          "lock_door": "Tuer-Schloss Entitaet",
+          "event_motion": "Bewegungs-Event Entitaet (optional)",
+          "event_doorbell": "Klingel-Event Entitaet (optional)",
+          "event_alarm": "Alarm-Event Entitaet (optional)",
+          "include_test_triggers": "Test-Trigger Helper einbeziehen",
+          "dashboard_filename": "Dashboard Ausgabedatei",
+          "package_filename": "Package Ausgabedatei"
+        }
+      }
+    }
+  },
+  "options": {
+    "error": {
+      "event_entities_required": "Test-Trigger nur deaktivieren, wenn alle drei Event-Entitaeten gesetzt sind.",
+      "yaml_required": "Dateiname muss auf .yaml enden"
+    },
+    "step": {
+      "init": {
+        "title": "SBB Dashboard Cards Optionen",
+        "description": "Entitaeten und Ausgabepfade aktualisieren. Beim Speichern werden die Dateien neu erzeugt.",
+        "data": {
+          "light_main": "Haupt-Licht Entitaet",
+          "camera_main": "Haupt-Kamera Entitaet",
+          "light_hall": "Flur-Licht Entitaet",
+          "switch_pump": "Pumpen-Schalter Entitaet",
+          "lock_door": "Tuer-Schloss Entitaet",
+          "event_motion": "Bewegungs-Event Entitaet (optional)",
+          "event_doorbell": "Klingel-Event Entitaet (optional)",
+          "event_alarm": "Alarm-Event Entitaet (optional)",
+          "include_test_triggers": "Test-Trigger Helper einbeziehen",
+          "dashboard_filename": "Dashboard Ausgabedatei",
+          "package_filename": "Package Ausgabedatei"
+        }
+      }
+    }
+  },
+  "services": {
+    "generate_files": {
+      "name": "Dashboard-Dateien erzeugen",
+      "description": "Erzeugt oder aktualisiert Dashboard- und Package-YAML aus den aktuellen Integrations-Einstellungen.",
+      "fields": {
+        "entry_id": {
+          "name": "Config Entry ID",
+          "description": "Optional. Erzeuge Dateien nur fuer diesen SBB Dashboard Cards Eintrag."
+        },
+        "overwrite": {
+          "name": "Bestehende Dateien ueberschreiben",
+          "description": "Wenn true, werden bestehende Dateien ueberschrieben."
+        }
+      }
+    }
+  }
+}

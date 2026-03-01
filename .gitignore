@@ -1,1 +1,4 @@
 config/entities.yaml
+.pycache_local/
+dist/
+__pycache__/
