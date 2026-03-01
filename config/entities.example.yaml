@@ -1,0 +1,7 @@
+# Copy this file to config/entities.yaml and set your own entity IDs.
+
+light_main: light.wohnzimmer
+camera_main: camera.haustuer
+light_hall: light.flur
+switch_pump: switch.gartenpumpe
+lock_door: lock.haustuer

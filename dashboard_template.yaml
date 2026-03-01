@@ -1,0 +1,217 @@
+title: Dashboard Cards Mockup
+views:
+  - title: Wohnzimmer
+    path: wohnzimmer
+    icon: mdi:sofa
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: markdown
+            content: |
+              ## Licht Card v2
+              - Tap: An/Aus
+              - Slider: Dimmen (Normalmodus)
+              - Double-Tap: Farbmodus fuer 12 Sekunden
+
+          - type: conditional
+            conditions:
+              - entity: input_boolean.light_wohnzimmer_color_mode
+                state: "off"
+            card:
+              type: tile
+              entity: __LIGHT_MAIN__
+              name: Wohnzimmer Licht
+              icon: mdi:lightbulb
+              tap_action:
+                action: toggle
+              hold_action:
+                action: more-info
+              double_tap_action:
+                action: perform-action
+                perform_action: script.light_wohnzimmer_color_mode_enable
+              features:
+                - type: light-brightness
+              state_content:
+                - state
+                - brightness
+
+          - type: conditional
+            conditions:
+              - entity: input_boolean.light_wohnzimmer_color_mode
+                state: "on"
+            card:
+              type: tile
+              entity: __LIGHT_MAIN__
+              name: Wohnzimmer Farbe
+              icon: mdi:palette
+              color: accent
+              tap_action:
+                action: toggle
+              hold_action:
+                action: more-info
+              double_tap_action:
+                action: perform-action
+                perform_action: script.light_wohnzimmer_color_mode_disable
+              features:
+                - type: light-color
+              state_content:
+                - state
+
+          - type: conditional
+            conditions:
+              - entity: input_boolean.light_wohnzimmer_color_mode
+                state: "on"
+            card:
+              type: tile
+              entity: timer.light_wohnzimmer_color_mode_window
+              name: Farbmodus Restzeit
+              icon: mdi:timer-sand
+              state_content:
+                - state
+
+      - type: vertical-stack
+        cards:
+          - type: markdown
+            content: |
+              ## Video Card v2 (nativ, ohne browser_mod)
+              - Tap: Grossansicht im Dashboard
+              - Auto-Grossansicht bei Events (Bewegung/Klingel/Alarm)
+              - Auto-Timeout schliesst die Grossansicht wieder
+
+          - type: conditional
+            conditions:
+              - entity: input_boolean.camera_fullscreen_mode
+                state: "off"
+            card:
+              type: vertical-stack
+              cards:
+                - type: picture-entity
+                  entity: __CAMERA_MAIN__
+                  name: Haustuer Kamera (Normal)
+                  show_state: false
+                  camera_view: live
+                  tap_action:
+                    action: perform-action
+                    perform_action: script.camera_open_fullscreen
+                - type: grid
+                  title: Schnelle Aktionen
+                  columns: 2
+                  square: false
+                  cards:
+                    - type: button
+                      entity: __LIGHT_HALL__
+                      name: Flur
+                      icon: mdi:lightbulb
+                      tap_action:
+                        action: toggle
+                    - type: button
+                      entity: __SWITCH_PUMP__
+                      name: Pumpe
+                      icon: mdi:water-pump
+                      tap_action:
+                        action: toggle
+                    - type: button
+                      entity: __LOCK_DOOR__
+                      name: Tuer
+                      icon: mdi:lock
+                      tap_action:
+                        action: toggle
+                    - type: button
+                      entity: input_boolean.camera_fullscreen_mode
+                      name: Grossansicht
+                      icon: mdi:fit-to-screen
+                      tap_action:
+                        action: perform-action
+                        perform_action: script.camera_open_fullscreen
+
+                - type: entities
+                  title: Auto-Vollbild
+                  entities:
+                    - entity: input_boolean.camera_auto_open_enabled
+                      name: Auto-Modus aktiv
+                    - entity: binary_sensor.kamera_auto_vollbild_bedingung
+                      name: Bedingung aktuell
+                    - entity: timer.camera_fullscreen_window
+                      name: Vollbild Timeout
+
+          - type: conditional
+            conditions:
+              - entity: input_boolean.camera_fullscreen_mode
+                state: "on"
+            card:
+              type: vertical-stack
+              cards:
+                - type: markdown
+                  content: |
+                    ### Kamera Grossansicht
+                    Tap aufs Bild oder auf "Schliessen", um zurueckzugehen.
+                - type: picture-entity
+                  entity: __CAMERA_MAIN__
+                  name: Haustuer Kamera (Gross)
+                  show_state: false
+                  camera_view: live
+                  tap_action:
+                    action: perform-action
+                    perform_action: script.camera_close_fullscreen
+                - type: grid
+                  title: Steuerung unter Video
+                  columns: 2
+                  square: false
+                  cards:
+                    - type: button
+                      entity: __LIGHT_HALL__
+                      name: Flur
+                      icon: mdi:lightbulb
+                      tap_action:
+                        action: toggle
+                    - type: button
+                      entity: __LOCK_DOOR__
+                      name: Tuer
+                      icon: mdi:lock
+                      tap_action:
+                        action: toggle
+                    - type: button
+                      entity: __SWITCH_PUMP__
+                      name: Pumpe
+                      icon: mdi:water-pump
+                      tap_action:
+                        action: toggle
+                    - type: button
+                      entity: input_boolean.camera_fullscreen_mode
+                      name: Schliessen
+                      icon: mdi:close
+                      tap_action:
+                        action: perform-action
+                        perform_action: script.camera_close_fullscreen
+
+                - type: entities
+                  title: Vollbild Status
+                  entities:
+                    - entity: timer.camera_fullscreen_window
+                      name: Restzeit
+                    - entity: binary_sensor.kamera_auto_vollbild_bedingung
+                      name: Event noch aktiv
+
+          - type: grid
+            title: Test Trigger (fuer V2 Mockup)
+            columns: 3
+            square: false
+            cards:
+              - type: button
+                entity: input_boolean.camera_event_motion
+                name: Bewegung
+                icon: mdi:motion-sensor
+                tap_action:
+                  action: toggle
+              - type: button
+                entity: input_boolean.camera_event_doorbell
+                name: Klingel
+                icon: mdi:doorbell-video
+                tap_action:
+                  action: toggle
+              - type: button
+                entity: input_boolean.camera_event_alarm
+                name: Alarm
+                icon: mdi:alarm-light
+                tap_action:
+                  action: toggle
