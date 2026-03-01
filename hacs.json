@@ -1,8 +1,5 @@
 {
   "name": "SBB Dashboard Cards",
   "homeassistant": "2023.1.0",
-  "domains": [
-    "sbb_dashboard_cards"
-  ],
   "render_readme": true
 }
