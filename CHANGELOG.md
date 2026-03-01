@@ -6,6 +6,13 @@ The format is based on Keep a Changelog and this project follows Semantic Versio
 
 ## [Unreleased]
 
+## [0.3.1] - 2026-03-01
+
+### Fixed
+- Corrected `hacs.json` schema for HACS validation compatibility.
+- Added required brand assets for HACS (`icon.png`, `logo.png`).
+- Completed integration metadata for better HACS discovery.
+
 ## [0.3.0] - 2026-03-01
 
 ### Added
@@ -18,4 +25,3 @@ The format is based on Keep a Changelog and this project follows Semantic Versio
 ### Changed
 - Repository structure updated from static mockup toward installable integration workflow.
 - README rewritten for HACS-first setup.
-
