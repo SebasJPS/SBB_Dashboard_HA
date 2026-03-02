@@ -21,6 +21,7 @@
           "event_doorbell": "Doorbell event entity (optional)",
           "event_alarm": "Alarm event entity (optional)",
           "include_test_triggers": "Include test trigger helpers",
+          "bootstrap_only": "Bootstrap only (protect manual YAML edits)",
           "dashboard_filename": "Dashboard output file",
           "package_filename": "Package output file"
         }
@@ -35,7 +36,7 @@
     "step": {
       "init": {
         "title": "SBB Dashboard Cards options",
-        "description": "Update entities and output paths. Saving options regenerates files.",
+        "description": "Update entities and output paths. With bootstrap-only enabled, existing files are not overwritten.",
         "data": {
           "light_main": "Main light entity",
           "camera_main": "Main camera entity",
@@ -46,6 +47,7 @@
           "event_doorbell": "Doorbell event entity (optional)",
           "event_alarm": "Alarm event entity (optional)",
           "include_test_triggers": "Include test trigger helpers",
+          "bootstrap_only": "Bootstrap only (protect manual YAML edits)",
           "dashboard_filename": "Dashboard output file",
           "package_filename": "Package output file"
         }

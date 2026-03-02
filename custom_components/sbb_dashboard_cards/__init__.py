@@ -13,7 +13,12 @@ from homeassistant.core import HomeAssistant, ServiceCall
 from homeassistant.exceptions import HomeAssistantError
 import homeassistant.helpers.config_validation as cv
 
-from .const import DOMAIN, SERVICE_GENERATE_FILES
+from .const import (
+    CONF_BOOTSTRAP_ONLY,
+    DEFAULT_BOOTSTRAP_ONLY,
+    DOMAIN,
+    SERVICE_GENERATE_FILES,
+)
 from .generator import async_generate_files
 
 _LOGGER = logging.getLogger(__name__)
@@ -30,6 +35,11 @@ def _entry_config(entry: ConfigEntry) -> dict[str, Any]:
     config = dict(entry.data)
     config.update(entry.options)
     return config
+
+
+def _should_overwrite_on_options_update(config_data: dict[str, Any]) -> bool:
+    """Keep manual edits by default; overwrite only when bootstrap-only mode is disabled."""
+    return not bool(config_data.get(CONF_BOOTSTRAP_ONLY, DEFAULT_BOOTSTRAP_ONLY))
 
 
 async def _notify_generation(
@@ -111,7 +121,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     async def _update_listener(hass: HomeAssistant, updated_entry: ConfigEntry) -> None:
         updated_config = _entry_config(updated_entry)
         try:
-            updated_paths = await async_generate_files(hass, updated_config, overwrite=True)
+            updated_paths = await async_generate_files(
+                hass,
+                updated_config,
+                overwrite=_should_overwrite_on_options_update(updated_config),
+            )
         except ValueError as err:
             _LOGGER.error("Failed to regenerate files from options update: %s", err)
             return

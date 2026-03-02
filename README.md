@@ -75,7 +75,8 @@ Service fields:
 
 - The integration is designed for public use: each user maps their own entities during setup.
 - Existing files are not overwritten during initial setup (`overwrite=false` on first generation).
-- Saving integration options regenerates files with overwrite enabled.
+- New option `bootstrap_only` is enabled by default: saving integration options keeps existing files untouched.
+- If you want to force a refresh, call service `sbb_dashboard_cards.generate_files` with `overwrite: true`.
 
 ## Maintainer Release Workflow
 

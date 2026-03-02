@@ -11,6 +11,7 @@ from homeassistant.core import callback
 from homeassistant.helpers import selector
 
 from .const import (
+    CONF_BOOTSTRAP_ONLY,
     CONF_CAMERA_MAIN,
     CONF_DASHBOARD_FILENAME,
     CONF_EVENT_ALARM,
@@ -22,6 +23,7 @@ from .const import (
     CONF_LOCK_DOOR,
     CONF_PACKAGE_FILENAME,
     CONF_SWITCH_PUMP,
+    DEFAULT_BOOTSTRAP_ONLY,
     DEFAULT_DASHBOARD_FILENAME,
     DEFAULT_INCLUDE_TEST_TRIGGERS,
     DEFAULT_PACKAGE_FILENAME,
@@ -87,6 +89,12 @@ def _schema(defaults: dict[str, Any]) -> vol.Schema:
         vol.Required(
             CONF_INCLUDE_TEST_TRIGGERS,
             default=defaults.get(CONF_INCLUDE_TEST_TRIGGERS, DEFAULT_INCLUDE_TEST_TRIGGERS),
+        )
+    ] = selector.BooleanSelector()
+    schema_map[
+        vol.Required(
+            CONF_BOOTSTRAP_ONLY,
+            default=defaults.get(CONF_BOOTSTRAP_ONLY, DEFAULT_BOOTSTRAP_ONLY),
         )
     ] = selector.BooleanSelector()
     schema_map[

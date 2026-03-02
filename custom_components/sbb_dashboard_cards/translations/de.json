@@ -21,6 +21,7 @@
           "event_doorbell": "Klingel-Event Entitaet (optional)",
           "event_alarm": "Alarm-Event Entitaet (optional)",
           "include_test_triggers": "Test-Trigger Helper einbeziehen",
+          "bootstrap_only": "Nur initial erzeugen (manuelle YAML-Aenderungen schuetzen)",
           "dashboard_filename": "Dashboard Ausgabedatei",
           "package_filename": "Package Ausgabedatei"
         }
@@ -35,7 +36,7 @@
     "step": {
       "init": {
         "title": "SBB Dashboard Cards Optionen",
-        "description": "Entitaeten und Ausgabepfade aktualisieren. Beim Speichern werden die Dateien neu erzeugt.",
+        "description": "Entitaeten und Ausgabepfade aktualisieren. Mit aktivem Bootstrap-Modus werden bestehende Dateien nicht ueberschrieben.",
         "data": {
           "light_main": "Haupt-Licht Entitaet",
           "camera_main": "Haupt-Kamera Entitaet",
@@ -46,6 +47,7 @@
           "event_doorbell": "Klingel-Event Entitaet (optional)",
           "event_alarm": "Alarm-Event Entitaet (optional)",
           "include_test_triggers": "Test-Trigger Helper einbeziehen",
+          "bootstrap_only": "Nur initial erzeugen (manuelle YAML-Aenderungen schuetzen)",
           "dashboard_filename": "Dashboard Ausgabedatei",
           "package_filename": "Package Ausgabedatei"
         }

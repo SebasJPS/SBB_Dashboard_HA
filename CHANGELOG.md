@@ -6,6 +6,15 @@ The format is based on Keep a Changelog and this project follows Semantic Versio
 
 ## [Unreleased]
 
+## [0.3.2] - 2026-03-02
+
+### Added
+- New option `bootstrap_only` (default: `true`) to keep generated YAML files in bootstrap mode.
+
+### Changed
+- Options save now preserves existing dashboard/package YAML files while bootstrap mode is enabled.
+- Documentation updated to describe manual overwrite via `sbb_dashboard_cards.generate_files` with `overwrite: true`.
+
 ## [0.3.1] - 2026-03-01
 
 ### Fixed

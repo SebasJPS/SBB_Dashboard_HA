@@ -11,11 +11,13 @@ CONF_EVENT_MOTION = "event_motion"
 CONF_EVENT_DOORBELL = "event_doorbell"
 CONF_EVENT_ALARM = "event_alarm"
 CONF_INCLUDE_TEST_TRIGGERS = "include_test_triggers"
+CONF_BOOTSTRAP_ONLY = "bootstrap_only"
 CONF_DASHBOARD_FILENAME = "dashboard_filename"
 CONF_PACKAGE_FILENAME = "package_filename"
 
 DEFAULT_DASHBOARD_FILENAME = "sbb_dashboard_cards_dashboard.yaml"
 DEFAULT_PACKAGE_FILENAME = "packages/sbb_dashboard_cards.yaml"
 DEFAULT_INCLUDE_TEST_TRIGGERS = True
+DEFAULT_BOOTSTRAP_ONLY = True
 
 SERVICE_GENERATE_FILES = "generate_files"
